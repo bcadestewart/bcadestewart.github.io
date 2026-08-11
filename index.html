@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Brandon Stewart — Software Engineer</title>
+<meta name="description" content="Brandon Stewart — software engineer in San Marcos, TX. Full-stack development, applied AI, and parallel computing projects.">
+<style>
+  :root {
+    --bg: #0f1216;
+    --surface: #171c23;
+    --surface-2: #1e242d;
+    --text: #e8ecf1;
+    --text-dim: #9aa5b1;
+    --accent: #5eb1ef;
+    --accent-2: #8ad0a6;
+    --border: #2a323d;
+    --radius: 12px;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    line-height: 1.6;
+  }
+  .wrap { max-width: 960px; margin: 0 auto; padding: 0 24px; }
+
+  header { padding: 88px 0 56px; }
+  .kicker {
+    color: var(--accent);
+    font-size: 0.95rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    font-weight: 600;
+  }
+  h1 { font-size: clamp(2.2rem, 6vw, 3.4rem); line-height: 1.1; margin: 10px 0 16px; }
+  .lede { color: var(--text-dim); font-size: 1.12rem; max-width: 640px; }
+  .links { margin-top: 26px; display: flex; flex-wrap: wrap; gap: 12px; }
+  .btn {
+    display: inline-block;
+    padding: 10px 18px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    color: var(--text);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.95rem;
+    transition: border-color .15s, background .15s;
+  }
+  .btn:hover { border-color: var(--accent); background: var(--surface); }
+  .btn.primary { background: var(--accent); border-color: var(--accent); color: #0b1016; }
+  .btn.primary:hover { background: #7cc0f2; }
+
+  section { padding: 40px 0; }
+  h2 {
+    font-size: 1.5rem;
+    margin-bottom: 22px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border);
+  }
+  h2 span { color: var(--accent); margin-right: 8px; }
+
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+  @media (max-width: 720px) { .grid { grid-template-columns: 1fr; } }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .card.featured { grid-column: 1 / -1; }
+  .card h3 { font-size: 1.15rem; }
+  .card h3 a { color: var(--text); text-decoration: none; }
+  .card h3 a:hover { color: var(--accent); }
+  .card p { color: var(--text-dim); font-size: 0.98rem; }
+  .tags { display: flex; flex-wrap: wrap; gap: 7px; margin-top: auto; padding-top: 8px; }
+  .tag {
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--accent-2);
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    padding: 3px 10px;
+    border-radius: 999px;
+  }
+  .repo {
+    font-size: 0.85rem;
+    color: var(--accent);
+    text-decoration: none;
+    word-break: break-all;
+  }
+  .repo:hover { text-decoration: underline; }
+
+  .skills { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  @media (max-width: 720px) { .skills { grid-template-columns: 1fr; } }
+  .skill-group {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 16px 20px;
+  }
+  .skill-group strong { color: var(--accent); font-size: 0.9rem; letter-spacing: .04em; text-transform: uppercase; }
+  .skill-group p { color: var(--text-dim); margin-top: 6px; font-size: 0.97rem; }
+
+  .edu {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px 22px;
+  }
+  .edu p { color: var(--text-dim); margin-top: 4px; }
+
+  footer {
+    border-top: 1px solid var(--border);
+    margin-top: 40px;
+    padding: 34px 0 48px;
+    color: var(--text-dim);
+    font-size: 0.95rem;
+  }
+  footer a { color: var(--accent); text-decoration: none; }
+  footer a:hover { text-decoration: underline; }
+</style>
+</head>
+<body>
+
+<header class="wrap">
+  <div class="kicker">San Marcos, Texas</div>
+  <h1>Brandon Stewart</h1>
+  <p class="lede">Software engineer with a B.S. in Computer Science from Texas State University (August 2026). I build full-stack web applications, integrate AI into real products, and enjoy digging into performance — from OpenMP pragmas to supercomputer batch jobs.</p>
+  <div class="links">
+    <a class="btn primary" href="mailto:bcadestewart@outlook.com">Email me</a>
+    <a class="btn" href="https://github.com/bcadestewart">GitHub</a>
+  </div>
+</header>
+
+<section class="wrap" id="projects">
+  <h2><span>01</span>Projects</h2>
+  <div class="grid">
+
+    <div class="card featured">
+      <h3><a href="https://github.com/bcadestewart/NotaBookPlus">NotaBookPlus — AI Note-Taking App</a></h3>
+      <p>A full-stack, single-page note-taking application built end to end: React frontend with client-side routing, Python FastAPI backend, rich-text editing, and export to TXT, PDF, PNG, and DOCX. Integrates the OpenAI API for note summarization and OpenAI Whisper for speech-to-text transcription, with in-browser audio recording (pause/resume) backed by an FFmpeg processing pipeline.</p>
+      <a class="repo" href="https://github.com/bcadestewart/NotaBookPlus">github.com/bcadestewart/NotaBookPlus</a>
+      <div class="tags"><span class="tag">React</span><span class="tag">FastAPI</span><span class="tag">Python</span><span class="tag">OpenAI API</span><span class="tag">Whisper</span><span class="tag">PyTorch</span><span class="tag">FFmpeg</span></div>
+    </div>
+
+    <div class="card featured">
+      <h3><a href="https://github.com/bcadestewart/Group_15_GAD">GAD — Geospatial Architecture Database</a></h3>
+      <p>Three-person senior capstone (grade: A). A decision-support web app that scores multi-hazard weather risk for any U.S. location and recommends locally adopted building codes and construction practices. Flask + SQLAlchemy backend integrating five external APIs (National Weather Service, FEMA flood &amp; risk data, USGS elevation, OpenStreetMap geocoding), Alembic migrations, an interactive Leaflet/Chart.js frontend, and PDF/CSV report export. Quality enforced with a pytest suite (mocked APIs) and GitHub Actions CI gating every pull request.</p>
+      <a class="repo" href="https://github.com/bcadestewart/Group_15_GAD">github.com/bcadestewart/Group_15_GAD</a>
+      <div class="tags"><span class="tag">Flask</span><span class="tag">SQLAlchemy</span><span class="tag">JavaScript</span><span class="tag">Leaflet</span><span class="tag">pytest</span><span class="tag">GitHub Actions</span></div>
+    </div>
+
+    <div class="card">
+      <h3>Parallel Computing on TACC Frontera</h3>
+      <p>Hand-written parallel algorithms in C++ using OpenMP, MPI, and CUDA, run on the Texas Advanced Computing Center's Frontera supercomputer via SLURM batch jobs — analyzing speedup and efficiency across parallelization strategies (row- vs. column-parallel fractals, loop-order variants of matrix multiplication, and more).</p>
+      <div class="tags"><span class="tag">C++</span><span class="tag">OpenMP</span><span class="tag">MPI</span><span class="tag">CUDA</span><span class="tag">SLURM</span></div>
+    </div>
+
+    <div class="card">
+      <h3>Virtual Network &amp; Firewall Lab</h3>
+      <p>Team project: built a virtual network over 8 weeks using a pfSense VM connecting Ubuntu, Kali Linux, and Windows machines. Authored security policies, configured firewall rules, and probed the network for vulnerabilities to harden the configuration.</p>
+      <div class="tags"><span class="tag">pfSense</span><span class="tag">Linux</span><span class="tag">Networking</span><span class="tag">Security</span></div>
+    </div>
+
+    <div class="card">
+      <h3><a href="https://github.com/bcadestewart/Java-Chess">Java Chess</a></h3>
+      <p>A complete chess game implementing full rule logic with object-oriented design.</p>
+      <a class="repo" href="https://github.com/bcadestewart/Java-Chess">github.com/bcadestewart/Java-Chess</a>
+      <div class="tags"><span class="tag">Java</span><span class="tag">OOP</span></div>
+    </div>
+
+    <div class="card">
+      <h3><a href="https://github.com/bcadestewart/Python_CacheSim">CPU Cache Simulator</a></h3>
+      <p>A command-line simulator modeling CPU cache behavior against configurable memory-address traces. Also on GitHub: a 4-bit ALU in Verilog and more.</p>
+      <a class="repo" href="https://github.com/bcadestewart/Python_CacheSim">github.com/bcadestewart/Python_CacheSim</a>
+      <div class="tags"><span class="tag">Python</span><span class="tag">Computer Architecture</span></div>
+    </div>
+
+  </div>
+</section>
+
+<section class="wrap" id="skills">
+  <h2><span>02</span>Skills</h2>
+  <div class="skills">
+    <div class="skill-group">
+      <strong>Languages</strong>
+      <p>Python, Java, C++ (OpenMP, MPI, CUDA), JavaScript, HTML/CSS, Verilog, MIPS Assembly</p>
+    </div>
+    <div class="skill-group">
+      <strong>Web &amp; AI Frameworks</strong>
+      <p>React, Flask, FastAPI, SQLAlchemy, SQLite, OpenAI API, Whisper, PyTorch, FFmpeg</p>
+    </div>
+    <div class="skill-group">
+      <strong>Tools &amp; Systems</strong>
+      <p>Git, GitKraken, GitHub Actions (CI/CD), pytest, Jira (Agile/Scrum), Linux, ServiceNow, Active Directory</p>
+    </div>
+    <div class="skill-group">
+      <strong>Certifications</strong>
+      <p>Asurion Tech, Samsung GSPN, Apple GSX, WISE Level 2</p>
+    </div>
+  </div>
+</section>
+
+<section class="wrap" id="education">
+  <h2><span>03</span>Education &amp; Experience</h2>
+  <div class="grid">
+    <div class="edu">
+      <h3>Texas State University</h3>
+      <p>B.S. Computer Science, Minor in Applied Mathematics — August 2026</p>
+      <p>Coursework: Data Structures &amp; Algorithms, Software Engineering &amp; Capstone, OO Design, Computer Architecture, Networks, Systems Security, Cryptography (Honors), Parallel Programming, Theory of Automata</p>
+    </div>
+    <div class="edu">
+      <h3>Industry Experience</h3>
+      <p>Desktop Support Technician — HCL America / Ascension Hospital System: imaged 800+ machines, deployed 1,000+ devices in an enterprise-wide refresh.</p>
+      <p>Repair Technician — uBreakiFix: hardware/software diagnosis and board-level repair.</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <p>Get in touch: <a href="mailto:bcadestewart@outlook.com">bcadestewart@outlook.com</a> · <a href="https://github.com/bcadestewart">github.com/bcadestewart</a></p>
+  </div>
+</footer>
+
+</body>
+</html>

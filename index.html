@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Brandon Stewart — Software Engineer</title>
-<meta name="description" content="Brandon Stewart — software engineer in San Marcos, TX. Full-stack development, applied AI, and parallel computing projects.">
+<meta name="description" content="Brandon Stewart — software engineer in San Marcos, TX. Projects include ExileBank, a live full-stack Path of Exile wealth tracker, plus applied AI and parallel computing work.">
 <style>
   :root {
     --bg: #0f1216;
@@ -54,6 +54,13 @@
   .btn.primary:hover { background: #7cc0f2; }
 
   section { padding: 40px 0; }
+  /* .wrap's shorthand padding was overriding the vertical padding above; restore it. */
+  header.wrap { padding-top: 88px; padding-bottom: 56px; }
+  section.wrap { padding-top: 40px; padding-bottom: 40px; }
+  @media (max-width: 720px) {
+    header.wrap { padding-top: 56px; padding-bottom: 28px; }
+    section.wrap { padding-top: 28px; padding-bottom: 28px; }
+  }
   h2 {
     font-size: 1.5rem;
     margin-bottom: 22px;
@@ -75,6 +82,86 @@
     gap: 10px;
   }
   .card.featured { grid-column: 1 / -1; }
+
+  /* Spotlight card: the flagship project. Intro beside a screenshot, highlights below. */
+  .card.spotlight {
+    grid-column: 1 / -1;
+    gap: 18px;
+    padding: 26px;
+    border-color: #35506a;
+    background: linear-gradient(135deg, #1a222c 0%, var(--surface) 65%);
+  }
+  .spotlight-top {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 28px;
+    align-items: center;
+  }
+  @media (max-width: 860px) { .spotlight-top { grid-template-columns: 1fr; } }
+  .spotlight-body { display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+  .eyebrow {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    color: var(--accent);
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+  .live {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--accent-2);
+    background: rgba(138, 208, 166, 0.1);
+    border: 1px solid rgba(138, 208, 166, 0.35);
+    padding: 2px 9px;
+    border-radius: 999px;
+    letter-spacing: 0.06em;
+  }
+  .live::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--accent-2); }
+  .highlights {
+    list-style: none;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px 28px;
+    padding-top: 16px;
+    border-top: 1px solid var(--border);
+  }
+  @media (max-width: 720px) { .highlights { grid-template-columns: 1fr; } }
+  .highlights li { position: relative; padding-left: 16px; color: var(--text-dim); font-size: 0.95rem; }
+  .highlights li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0.62em;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--accent);
+  }
+  .highlights strong { color: var(--text); font-weight: 600; }
+  .card code {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: 0.88em;
+    color: var(--text);
+    background: var(--surface-2);
+    padding: 1px 5px;
+    border-radius: 4px;
+  }
+  .card-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 4px; }
+  .shot {
+    display: block;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 14px 32px rgba(0, 0, 0, 0.4);
+    transition: border-color .15s, transform .15s;
+  }
+  .shot:hover { border-color: var(--accent); transform: translateY(-2px); }
+  .shot img { display: block; width: 100%; height: auto; }
   .card h3 { font-size: 1.15rem; }
   .card h3 a { color: var(--text); text-decoration: none; }
   .card h3 a:hover { color: var(--accent); }
@@ -143,6 +230,25 @@
   <h2><span>01</span>Projects</h2>
   <div class="grid">
 
+    <div class="card spotlight">
+      <div class="spotlight-top">
+        <div class="spotlight-body">
+          <div class="eyebrow">Featured project <span class="live">Live</span></div>
+          <h3><a href="https://exilebank.vercel.app">ExileBank — Path of Exile Wealth Tracker</a></h3>
+          <p>A full-stack web app that prices a Path of Exile player's stash in real time and charts their net worth over time. Players sign in with their own game account through an OAuth client approved by Grinding Gear Games, the game's developer.</p>
+          <div class="card-actions"><a class="btn primary" href="https://exilebank.vercel.app">Open the live app</a></div>
+        </div>
+        <a class="shot" href="https://exilebank.vercel.app" aria-label="Open the ExileBank live app"><img src="img/exilebank-home.jpg" width="800" height="472" alt="ExileBank home page with the headline “Wealth Awaits, Exile” and feature cards for Stash, Economy, and Leaderboard"></a>
+      </div>
+      <ul class="highlights">
+          <li><strong>Secure sign-in.</strong> OAuth 2.1 authorization-code flow with PKCE and token refresh. Access tokens stay on the server behind an httpOnly session cookie and never reach the browser.</li>
+          <li><strong>Rate-limit-aware API client.</strong> Parses the game API's account, IP, and client rate-limit headers on every response and queues each user's requests to wait out cooldowns.</li>
+          <li><strong>Pricing and history.</strong> Prices every stash tab against cached poe.ninja market data and saves net-worth snapshots to SQLite to chart wealth over time.</li>
+          <li><strong>Single-domain deployment.</strong> Vercel serves the React + Vite build and forwards <code>/api</code> to an Express server on Railway, keeping OAuth redirects and same-site cookies on one origin.</li>
+      </ul>
+      <div class="tags"><span class="tag">React</span><span class="tag">Vite</span><span class="tag">Node.js</span><span class="tag">Express</span><span class="tag">SQLite</span><span class="tag">OAuth + PKCE</span><span class="tag">Vercel</span><span class="tag">Railway</span></div>
+    </div>
+
     <div class="card featured">
       <h3><a href="https://github.com/bcadestewart/NotaBookPlus">NotaBookPlus — AI Note-Taking App</a></h3>
       <p>A full-stack, single-page note-taking application built end to end: React frontend with client-side routing, Python FastAPI backend, rich-text editing, and export to TXT, PDF, PNG, and DOCX. Integrates the OpenAI API for note summarization and OpenAI Whisper for speech-to-text transcription, with in-browser audio recording (pause/resume) backed by an FFmpeg processing pipeline.</p>
@@ -195,11 +301,11 @@
     </div>
     <div class="skill-group">
       <strong>Web &amp; AI Frameworks</strong>
-      <p>React, Flask, FastAPI, SQLAlchemy, SQLite, OpenAI API, Whisper, PyTorch, FFmpeg</p>
+      <p>React, Vite, Node.js, Express, Flask, FastAPI, SQLAlchemy, SQLite, OpenAI API, Whisper, PyTorch, FFmpeg</p>
     </div>
     <div class="skill-group">
       <strong>Tools &amp; Systems</strong>
-      <p>Git, GitKraken, GitHub Actions (CI/CD), pytest, Jira (Agile/Scrum), Linux, ServiceNow, Active Directory</p>
+      <p>Git, GitKraken, GitHub Actions (CI/CD), pytest, Vercel, Railway, Jira (Agile/Scrum), Linux, ServiceNow, Active Directory</p>
     </div>
     <div class="skill-group">
       <strong>Certifications</strong>

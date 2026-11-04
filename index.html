@@ -152,16 +152,43 @@
     border-radius: 4px;
   }
   .card-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 4px; }
-  .shot {
-    display: block;
+  /* Screenshot gallery: CSS-only (radio inputs), one frame, three views */
+  .gallery { position: relative; display: grid; gap: 10px; min-width: 0; }
+  .gallery input { position: absolute; opacity: 0; pointer-events: none; }
+  .frame {
+    position: relative;
+    aspect-ratio: 7 / 5;
+    background: #0c0b09;
     border: 1px solid var(--border);
     border-radius: 10px;
     overflow: hidden;
     box-shadow: 0 14px 32px rgba(0, 0, 0, 0.4);
-    transition: border-color .15s, transform .15s;
+    transition: border-color .15s;
   }
-  .shot:hover { border-color: var(--accent); transform: translateY(-2px); }
-  .shot img { display: block; width: 100%; height: auto; }
+  .frame:hover { border-color: var(--accent); }
+  .frame a { position: absolute; inset: 0; display: none; }
+  .frame img { display: block; width: 100%; height: 100%; object-fit: contain; }
+  #eb-stash:checked ~ .frame .f-stash,
+  #eb-wealth:checked ~ .frame .f-wealth,
+  #eb-home:checked ~ .frame .f-home { display: block; }
+  .picker { display: flex; flex-wrap: wrap; gap: 8px; }
+  .picker label {
+    cursor: pointer;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--text-dim);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 4px 12px;
+    transition: border-color .15s, color .15s, background .15s;
+  }
+  .picker label:hover { color: var(--text); border-color: var(--accent); }
+  #eb-stash:checked ~ .picker label[for="eb-stash"],
+  #eb-wealth:checked ~ .picker label[for="eb-wealth"],
+  #eb-home:checked ~ .picker label[for="eb-home"] { color: #0b1016; background: var(--accent); border-color: var(--accent); }
+  #eb-stash:focus-visible ~ .picker label[for="eb-stash"],
+  #eb-wealth:focus-visible ~ .picker label[for="eb-wealth"],
+  #eb-home:focus-visible ~ .picker label[for="eb-home"] { outline: 2px solid var(--accent); outline-offset: 2px; }
   .card h3 { font-size: 1.15rem; }
   .card h3 a { color: var(--text); text-decoration: none; }
   .card h3 a:hover { color: var(--accent); }
@@ -238,7 +265,21 @@
           <p>A full-stack web app that prices a Path of Exile player's stash in real time and charts their net worth over time. Players sign in with their own game account through an OAuth client approved by Grinding Gear Games, the game's developer.</p>
           <div class="card-actions"><a class="btn primary" href="https://exilebank.vercel.app">Open the live app</a></div>
         </div>
-        <a class="shot" href="https://exilebank.vercel.app" aria-label="Open the ExileBank live app"><img src="img/exilebank-home.jpg" width="800" height="472" alt="ExileBank home page with the headline “Wealth Awaits, Exile” and feature cards for Stash, Economy, and Leaderboard"></a>
+        <div class="gallery">
+          <input type="radio" name="eb-view" id="eb-stash" checked>
+          <input type="radio" name="eb-view" id="eb-wealth">
+          <input type="radio" name="eb-view" id="eb-home">
+          <div class="frame">
+            <a class="f-stash" href="img/exilebank-stash.jpg" target="_blank" rel="noopener" aria-label="Open the stash tracker screenshot full size"><img src="img/exilebank-stash.jpg" width="1400" height="1086" alt="ExileBank stash tracker: total net worth of 1,178 divines, a per-tab value breakdown, and priced items such as Orb of Annulment and Vaal Orb"></a>
+            <a class="f-wealth" href="img/exilebank-wealth.jpg" target="_blank" rel="noopener" aria-label="Open the wealth chart screenshot full size"><img src="img/exilebank-wealth.jpg" width="1400" height="794" loading="lazy" alt="ExileBank wealth-over-time chart plotting net worth at each snapshot, with a currency-per-hour stat"></a>
+            <a class="f-home" href="img/exilebank-home.jpg" target="_blank" rel="noopener" aria-label="Open the home page screenshot full size"><img src="img/exilebank-home.jpg" width="800" height="472" loading="lazy" alt="ExileBank home page with the headline “Wealth Awaits, Exile” and feature cards for Stash, Economy, and Leaderboard"></a>
+          </div>
+          <div class="picker">
+            <label for="eb-stash">Stash tracker</label>
+            <label for="eb-wealth">Wealth over time</label>
+            <label for="eb-home">Home page</label>
+          </div>
+        </div>
       </div>
       <ul class="highlights">
           <li><strong>Secure sign-in.</strong> OAuth 2.1 authorization-code flow with PKCE and token refresh. Access tokens stay on the server behind an httpOnly session cookie and never reach the browser.</li>

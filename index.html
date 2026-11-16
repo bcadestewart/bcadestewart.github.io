@@ -90,8 +90,8 @@
     .theme-toggle:hover { background: var(--surface-hover); border-color: rgba(255,255,255,.2); }
     .theme-icon { width: 13px; height: 13px; border-radius: 50%; background: linear-gradient(90deg, var(--blue) 50%, transparent 50%); border: 1px solid var(--blue); }
     main { overflow: clip; }
-    .hero { position: relative; isolation: isolate; overflow: hidden; display: grid; grid-template-columns: 1.04fr .96fr; align-items: center; gap: clamp(28px, 5vw, 70px); padding-block: clamp(82px, 10vw, 122px) clamp(76px, 9vw, 108px); }
-    .hero-atmosphere { position: absolute; z-index: 0; inset: 0; overflow: hidden; pointer-events: none; background: radial-gradient(ellipse at 24% 98%, rgba(82,99,190,.07), transparent 58%); }
+    .hero { position: relative; isolation: isolate; display: grid; grid-template-columns: 1.04fr .96fr; align-items: center; gap: clamp(28px, 5vw, 70px); padding-block: clamp(82px, 10vw, 122px) clamp(76px, 9vw, 108px); }
+    .hero-atmosphere { position: absolute; z-index: 0; top: 0; bottom: 0; left: 50%; width: 100vw; overflow: hidden; transform: translateX(-50%); pointer-events: none; background: radial-gradient(ellipse at 24% 98%, rgba(82,99,190,.07), transparent 58%); }
     .hero-atmosphere svg { position: absolute; inset: 0; width: 100%; height: 100%; }
     .hero-wave-ribbon { transform-box: fill-box; transform-origin: center; animation: grain-wave-drift 24s ease-in-out infinite alternate; }
     @keyframes grain-wave-drift { from { transform: translate3d(-1.2%, .8%, 0) scale(1); } to { transform: translate3d(1%, -1.3%, 0) scale(1.025); } }

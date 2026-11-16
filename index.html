@@ -24,6 +24,9 @@
       --blue: #a9c5ff;
       --green: #c8ee9b;
       --coral: #ff9b73;
+      --wave-blue: #637dff;
+      --wave-violet: #9869eb;
+      --wave-coral: #ed7d83;
       --shadow: 0 24px 80px rgba(0, 0, 0, .28);
       --radius: 22px;
       --max: 1160px;
@@ -32,6 +35,9 @@
       --blue: #d9dce2;
       --green: #b7bcc4;
       --coral: #d9dce2;
+      --wave-blue: #9398a3;
+      --wave-violet: #b6bac2;
+      --wave-coral: #e1e2e5;
       --surface: rgba(255, 255, 255, .035);
       --surface-hover: rgba(255, 255, 255, .065);
     }
@@ -84,7 +90,12 @@
     .theme-toggle:hover { background: var(--surface-hover); border-color: rgba(255,255,255,.2); }
     .theme-icon { width: 13px; height: 13px; border-radius: 50%; background: linear-gradient(90deg, var(--blue) 50%, transparent 50%); border: 1px solid var(--blue); }
     main { overflow: clip; }
-    .hero { display: grid; grid-template-columns: 1.04fr .96fr; align-items: center; gap: clamp(28px, 5vw, 70px); padding-block: clamp(82px, 10vw, 122px) clamp(76px, 9vw, 108px); }
+    .hero { position: relative; isolation: isolate; overflow: hidden; display: grid; grid-template-columns: 1.04fr .96fr; align-items: center; gap: clamp(28px, 5vw, 70px); padding-block: clamp(82px, 10vw, 122px) clamp(76px, 9vw, 108px); }
+    .hero-atmosphere { position: absolute; z-index: 0; inset: 0; overflow: hidden; pointer-events: none; background: radial-gradient(ellipse at 24% 98%, rgba(82,99,190,.10), transparent 58%); }
+    .hero-atmosphere svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+    .hero-wave-ribbon { transform-box: fill-box; transform-origin: center; animation: grain-wave-drift 24s ease-in-out infinite alternate; }
+    @keyframes grain-wave-drift { from { transform: translate3d(-1.2%, .8%, 0) scale(1); } to { transform: translate3d(1%, -1.3%, 0) scale(1.025); } }
+    .hero > .reveal, .hero > .hero-project { position: relative; z-index: 1; }
     .hero > .reveal { max-width: 620px; }
     .eyebrow { color: var(--muted); font-size: .76rem; letter-spacing: .08em; font-weight: 600; }
     h1 { max-width: none; margin: 18px 0 20px; font-size: clamp(3rem, 5.8vw, 4.65rem); line-height: .98; letter-spacing: -.075em; font-weight: 650; }
@@ -253,10 +264,46 @@
 
   <main id="main">
     <section class="shell hero" id="top" aria-labelledby="intro-title">
+      <div class="hero-atmosphere" aria-hidden="true">
+        <svg viewBox="0 0 1200 680" preserveAspectRatio="none" focusable="false">
+          <defs>
+            <linearGradient id="hero-wave-cool" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0" stop-color="var(--wave-blue)" stop-opacity=".44"></stop>
+              <stop offset=".48" stop-color="var(--wave-violet)" stop-opacity=".28"></stop>
+              <stop offset="1" stop-color="var(--wave-coral)" stop-opacity=".20"></stop>
+            </linearGradient>
+            <linearGradient id="hero-wave-warm" x1="0" y1="0" x2="1" y2=".3">
+              <stop offset="0" stop-color="var(--wave-violet)" stop-opacity=".16"></stop>
+              <stop offset=".58" stop-color="var(--wave-blue)" stop-opacity=".22"></stop>
+              <stop offset="1" stop-color="var(--wave-coral)" stop-opacity=".30"></stop>
+            </linearGradient>
+            <filter id="hero-wave-distortion" x="-10%" y="-10%" width="120%" height="120%">
+              <feTurbulence type="fractalNoise" baseFrequency=".006 .035" numOctaves="2" seed="7" result="warp"></feTurbulence>
+              <feDisplacementMap in="SourceGraphic" in2="warp" scale="14" xChannelSelector="R" yChannelSelector="G"></feDisplacementMap>
+            </filter>
+            <filter id="hero-grain">
+              <feTurbulence type="fractalNoise" baseFrequency=".82" numOctaves="2" seed="9" stitchTiles="stitch"></feTurbulence>
+              <feColorMatrix type="saturate" values="0"></feColorMatrix>
+            </filter>
+            <mask id="hero-wave-mask" maskUnits="userSpaceOnUse" maskContentUnits="userSpaceOnUse" x="0" y="0" width="1200" height="680">
+              <rect width="1200" height="680" fill="black"></rect>
+              <path d="M-80 372 C68 320 176 338 310 389 C433 435 513 489 661 446 C797 406 847 329 988 360 C1123 390 1195 449 1280 410 L1280 720 L-80 720 Z" fill="white"></path>
+              <path d="M-80 473 C65 417 185 423 324 468 C455 510 536 557 676 516 C824 474 877 424 1017 459 C1138 489 1200 535 1280 508 L1280 720 L-80 720 Z" fill="white"></path>
+            </mask>
+          </defs>
+          <g class="hero-wave-ribbon">
+            <g filter="url(#hero-wave-distortion)">
+              <path d="M-80 372 C68 320 176 338 310 389 C433 435 513 489 661 446 C797 406 847 329 988 360 C1123 390 1195 449 1280 410 L1280 720 L-80 720 Z" fill="url(#hero-wave-cool)"></path>
+              <path d="M-80 473 C65 417 185 423 324 468 C455 510 536 557 676 516 C824 474 877 424 1017 459 C1138 489 1200 535 1280 508 L1280 720 L-80 720 Z" fill="url(#hero-wave-warm)"></path>
+            </g>
+            <rect width="1200" height="680" filter="url(#hero-grain)" mask="url(#hero-wave-mask)" opacity=".18" style="mix-blend-mode: soft-light"></rect>
+          </g>
+        </svg>
+      </div>
       <div class="reveal">
         <p class="eyebrow">Software engineer &nbsp;·&nbsp; San Marcos, Texas</p>
         <h1 id="intro-title">Brandon <span class="accent-name">Stewart</span></h1>
-        <p class="hero-copy">I build full-stack web applications, integrate AI into practical tools, and work on performance-focused systems. I studied computer science and applied mathematics at Texas State.</p>
+        <p class="hero-copy">Studied computer science and applied mathematics at Texas State.</p>
         <div class="actions">
           <a class="button primary" href="#work">Explore selected work <span aria-hidden="true">↓</span></a>
           <a class="button" href="mailto:bcadestewart@outlook.com">Email me <span aria-hidden="true">↗</span></a>

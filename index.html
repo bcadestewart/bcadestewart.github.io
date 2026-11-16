@@ -91,7 +91,7 @@
     .theme-icon { width: 13px; height: 13px; border-radius: 50%; background: linear-gradient(90deg, var(--blue) 50%, transparent 50%); border: 1px solid var(--blue); }
     main { overflow: clip; }
     .hero { position: relative; isolation: isolate; overflow: hidden; display: grid; grid-template-columns: 1.04fr .96fr; align-items: center; gap: clamp(28px, 5vw, 70px); padding-block: clamp(82px, 10vw, 122px) clamp(76px, 9vw, 108px); }
-    .hero-atmosphere { position: absolute; z-index: 0; inset: 0; overflow: hidden; pointer-events: none; background: radial-gradient(ellipse at 24% 98%, rgba(82,99,190,.10), transparent 58%); }
+    .hero-atmosphere { position: absolute; z-index: 0; inset: 0; overflow: hidden; pointer-events: none; background: radial-gradient(ellipse at 24% 98%, rgba(82,99,190,.07), transparent 58%); }
     .hero-atmosphere svg { position: absolute; inset: 0; width: 100%; height: 100%; }
     .hero-wave-ribbon { transform-box: fill-box; transform-origin: center; animation: grain-wave-drift 24s ease-in-out infinite alternate; }
     @keyframes grain-wave-drift { from { transform: translate3d(-1.2%, .8%, 0) scale(1); } to { transform: translate3d(1%, -1.3%, 0) scale(1.025); } }
@@ -268,14 +268,14 @@
         <svg viewBox="0 0 1200 680" preserveAspectRatio="none" focusable="false">
           <defs>
             <linearGradient id="hero-wave-cool" x1="0" y1="0" x2="1" y2="0">
-              <stop offset="0" stop-color="var(--wave-blue)" stop-opacity=".44"></stop>
-              <stop offset=".48" stop-color="var(--wave-violet)" stop-opacity=".28"></stop>
-              <stop offset="1" stop-color="var(--wave-coral)" stop-opacity=".20"></stop>
+              <stop offset="0" stop-color="var(--wave-blue)" stop-opacity=".24"></stop>
+              <stop offset=".48" stop-color="var(--wave-violet)" stop-opacity=".17"></stop>
+              <stop offset="1" stop-color="var(--wave-coral)" stop-opacity=".12"></stop>
             </linearGradient>
             <linearGradient id="hero-wave-warm" x1="0" y1="0" x2="1" y2=".3">
-              <stop offset="0" stop-color="var(--wave-violet)" stop-opacity=".16"></stop>
-              <stop offset=".58" stop-color="var(--wave-blue)" stop-opacity=".22"></stop>
-              <stop offset="1" stop-color="var(--wave-coral)" stop-opacity=".30"></stop>
+              <stop offset="0" stop-color="var(--wave-violet)" stop-opacity=".09"></stop>
+              <stop offset=".58" stop-color="var(--wave-blue)" stop-opacity=".12"></stop>
+              <stop offset="1" stop-color="var(--wave-coral)" stop-opacity=".18"></stop>
             </linearGradient>
             <filter id="hero-wave-distortion" x="-10%" y="-10%" width="120%" height="120%">
               <feTurbulence type="fractalNoise" baseFrequency=".006 .035" numOctaves="2" seed="7" result="warp"></feTurbulence>
@@ -287,16 +287,16 @@
             </filter>
             <mask id="hero-wave-mask" maskUnits="userSpaceOnUse" maskContentUnits="userSpaceOnUse" x="0" y="0" width="1200" height="680">
               <rect width="1200" height="680" fill="black"></rect>
-              <path d="M-80 372 C68 320 176 338 310 389 C433 435 513 489 661 446 C797 406 847 329 988 360 C1123 390 1195 449 1280 410 L1280 720 L-80 720 Z" fill="white"></path>
-              <path d="M-80 473 C65 417 185 423 324 468 C455 510 536 557 676 516 C824 474 877 424 1017 459 C1138 489 1200 535 1280 508 L1280 720 L-80 720 Z" fill="white"></path>
+              <path d="M-80 462 C68 412 176 428 310 472 C433 510 513 549 661 515 C797 483 847 421 988 445 C1123 470 1195 523 1280 490 L1280 720 L-80 720 Z" fill="white"></path>
+              <path d="M-80 520 C65 482 185 484 324 516 C455 545 536 584 676 552 C824 520 877 480 1017 506 C1138 530 1200 564 1280 543 L1280 720 L-80 720 Z" fill="white"></path>
             </mask>
           </defs>
           <g class="hero-wave-ribbon">
             <g filter="url(#hero-wave-distortion)">
-              <path d="M-80 372 C68 320 176 338 310 389 C433 435 513 489 661 446 C797 406 847 329 988 360 C1123 390 1195 449 1280 410 L1280 720 L-80 720 Z" fill="url(#hero-wave-cool)"></path>
-              <path d="M-80 473 C65 417 185 423 324 468 C455 510 536 557 676 516 C824 474 877 424 1017 459 C1138 489 1200 535 1280 508 L1280 720 L-80 720 Z" fill="url(#hero-wave-warm)"></path>
+              <path d="M-80 462 C68 412 176 428 310 472 C433 510 513 549 661 515 C797 483 847 421 988 445 C1123 470 1195 523 1280 490 L1280 720 L-80 720 Z" fill="url(#hero-wave-cool)"></path>
+              <path d="M-80 520 C65 482 185 484 324 516 C455 545 536 584 676 552 C824 520 877 480 1017 506 C1138 530 1200 564 1280 543 L1280 720 L-80 720 Z" fill="url(#hero-wave-warm)"></path>
             </g>
-            <rect width="1200" height="680" filter="url(#hero-grain)" mask="url(#hero-wave-mask)" opacity=".18" style="mix-blend-mode: soft-light"></rect>
+            <rect width="1200" height="680" filter="url(#hero-grain)" mask="url(#hero-wave-mask)" opacity=".42" style="mix-blend-mode: overlay"></rect>
           </g>
         </svg>
       </div>

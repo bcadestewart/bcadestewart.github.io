@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#000000">
+  <title>Java Chess — Brandon Stewart</title>
+  <meta name="description" content="Play a chess search agent. Legal moves, castling, en passant, promotion, and negamax with alpha-beta pruning.">
+  <link rel="icon" href="../favicon.svg" type="image/svg+xml">
+  <link rel="preload" href="../fonts/MonaSans-latin-var.woff2" as="font" type="font/woff2" crossorigin>
+  <style>
+    @font-face {
+      font-family: "Mona Sans";
+      src: url("../fonts/MonaSans-latin-var.woff2") format("woff2");
+      font-weight: 200 900;
+      font-stretch: 75% 125%;
+      font-display: swap;
+    }
+    :root {
+      color-scheme: dark;
+      --bg: #000;
+      --text: #ebebef;
+      --text-2: #a1a1a8;
+      --accent: #a9c5ff;
+      --accent-ink: #0b1020;
+      --light: #f0d9b5;
+      --dark: #b58863;
+      --last: #cdd26a;
+      --selected: #f6f682;
+      --gutter: clamp(20px, 5vw, 64px);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-width: 320px;
+      background: var(--bg);
+      color: var(--text);
+      font-family: "Mona Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.5;
+    }
+    a { color: inherit; }
+    .page {
+      width: min(1040px, calc(100% - 2 * var(--gutter)));
+      margin: 0 auto;
+      padding: 28px 0 64px;
+    }
+    .top { display: flex; justify-content: space-between; gap: 16px; align-items: center; }
+    .back { color: var(--text-2); text-decoration: none; font-weight: 520; }
+    .back:hover { color: var(--text); }
+    h1 { margin: 28px 0 8px; font-weight: 340; font-stretch: 112%; letter-spacing: -.03em; font-size: clamp(2rem, 5vw, 3.4rem); }
+    .lede { margin: 0; max-width: 62ch; color: var(--text-2); }
+    .play { display: grid; grid-template-columns: auto minmax(220px, 280px); gap: 28px; align-items: start; margin-top: 32px; }
+    .board {
+      display: grid;
+      grid-template-columns: repeat(8, minmax(0, 1fr));
+      width: min(100%, 560px);
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, .08);
+    }
+    .square {
+      aspect-ratio: 1;
+      border: 0;
+      padding: 0;
+      font-size: clamp(1.6rem, 5vw, 2.7rem);
+      line-height: 1;
+      cursor: pointer;
+      color: #1a1a1a;
+    }
+    .square.light { background: var(--light); }
+    .square.dark { background: var(--dark); }
+    .square.last { box-shadow: inset 0 0 0 4px var(--last); }
+    .square.selected { background: var(--selected); }
+    .square.target { box-shadow: inset 0 0 0 4px rgba(30, 70, 30, .55); }
+    .side { display: grid; gap: 16px; padding-top: 4px; }
+    .status { margin: 0; font-size: 1.15rem; }
+    button, .toggle { font: inherit; }
+    .actions { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+    .btn {
+      min-height: 42px;
+      padding: 0 16px;
+      border-radius: 999px;
+      border: 0;
+      background: var(--accent);
+      color: var(--accent-ink);
+      font-weight: 560;
+      cursor: pointer;
+    }
+    .toggle { display: flex; gap: 8px; align-items: center; color: var(--text-2); }
+    .promo { display: flex; gap: 8px; }
+    .promo button {
+      width: 44px; height: 44px; border-radius: 10px; border: 1px solid rgba(255,255,255,.16);
+      background: #17171a; color: var(--text); font-size: 1.4rem; cursor: pointer;
+    }
+    .note { margin: 28px 0 0; color: var(--text-2); max-width: 68ch; }
+    @media (max-width: 760px) {
+      .play { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <div class="top"><a class="back" href="../">← Brandon Stewart</a></div>
+    <h1>Java Chess</h1>
+    <p class="lede">Play White against a negamax agent. It searches three plies with alpha-beta pruning and prefers captures. Castling, en passant, promotion, check, and checkmate follow the same rules as the Java engine.</p>
+    <div class="play">
+      <div class="board" id="board" role="grid" aria-label="Chessboard"></div>
+      <div class="side">
+        <p class="status" id="status">White to move</p>
+        <div class="promo" id="promo" hidden></div>
+        <div class="actions">
+          <button class="btn" id="restart" type="button">New game</button>
+          <label class="toggle"><input id="agent" type="checkbox" checked> Play the agent</label>
+        </div>
+      </div>
+    </div>
+    <p class="note">The Java project generates moves, runs perft against known positions, and searches with the same negamax shape. This page is that engine in the browser. <code>chess/perft.mjs</code> checks the starting position, the Kiwipete castling position, and scholar’s mate.</p>
+  </main>
+  <script type="module">
+    import { apply, choose, legalMoves, outcome, positionKey, squareName, starting } from "./engine.mjs";
+
+    const GLYPH = {
+      wk: "♔", wq: "♕", wr: "♖", wb: "♗", wn: "♘", wp: "♙",
+      bk: "♚", bq: "♛", br: "♜", bb: "♝", bn: "♞", bp: "♟",
+    };
+    const PROMO = ["q", "r", "b", "n"];
+    const boardEl = document.querySelector("#board");
+    const statusEl = document.querySelector("#status");
+    const promoEl = document.querySelector("#promo");
+    const agentBox = document.querySelector("#agent");
+
+    let state = starting();
+    let history = [positionKey(state)];
+    let selected = -1;
+    let last = null;
+    let thinking = false;
+    let pending = [];
+
+    for (let square = 0; square < 64; square += 1) {
+      const button = document.createElement("button");
+      button.type = "button";
+      button.className = "square";
+      button.dataset.square = String(displaySquare(square));
+      button.addEventListener("click", () => onSquare(displaySquare(square)));
+      boardEl.append(button);
+    }
+
+    document.querySelector("#restart").addEventListener("click", () => {
+      state = starting();
+      history = [positionKey(state)];
+      selected = -1;
+      last = null;
+      thinking = false;
+      pending = [];
+      promoEl.hidden = true;
+      render();
+    });
+    agentBox.addEventListener("change", () => {
+      if (agentBox.checked) think();
+    });
+
+    render();
+
+    function onSquare(square) {
+      if (thinking || isOver() || agentToMove()) return;
+      const hits = pending.filter((move) => move.to === square);
+      if (selected >= 0 && hits.length) {
+        if (hits.length > 1) {
+          showPromo(hits);
+          return;
+        }
+        play(hits[0]);
+        return;
+      }
+      const piece = state.sq[square];
+      if (piece && piece.side === state.turn) {
+        selected = square;
+        pending = legalMoves(state).filter((move) => move.from === square);
+      } else {
+        selected = -1;
+        pending = [];
+      }
+      promoEl.hidden = true;
+      render();
+    }
+
+    function showPromo(hits) {
+      promoEl.hidden = false;
+      promoEl.replaceChildren();
+      for (const type of PROMO) {
+        const move = hits.find((item) => item.promo === type);
+        if (!move) continue;
+        const button = document.createElement("button");
+        button.type = "button";
+        button.textContent = GLYPH[`${state.turn}${type}`];
+        button.setAttribute("aria-label", `Promote to ${type}`);
+        button.addEventListener("click", () => {
+          promoEl.hidden = true;
+          play(move);
+        });
+        promoEl.append(button);
+      }
+    }
+
+    function play(move) {
+      last = move;
+      state = apply(state, move);
+      history.push(positionKey(state));
+      selected = -1;
+      pending = [];
+      render();
+      think();
+    }
+
+    function think() {
+      if (!agentBox.checked || thinking || isOver() || state.turn !== "b") return;
+      thinking = true;
+      render();
+      setTimeout(() => {
+        const move = choose(state, 3);
+        thinking = false;
+        if (move) play(move);
+        else render();
+      }, 30);
+    }
+
+    function render() {
+      const result = outcome(state, history);
+      const buttons = boardEl.children;
+      for (let display = 0; display < 64; display += 1) {
+        const square = displaySquare(display);
+        const button = buttons[display];
+        const piece = state.sq[square];
+        const file = square & 7;
+        const rank = square >> 3;
+        button.className = `square ${(file + rank) % 2 === 0 ? "dark" : "light"}`;
+        if (last && (square === last.from || square === last.to)) button.classList.add("last");
+        if (square === selected) button.classList.add("selected");
+        if (pending.some((move) => move.to === square)) button.classList.add("target");
+        button.textContent = piece ? GLYPH[piece.side + piece.type] : "";
+        button.setAttribute("aria-label", label(square, piece));
+      }
+      statusEl.textContent = thinking ? "Agent is thinking" : statusText(result);
+    }
+
+    function statusText(result) {
+      if (result === "checkmate") return `${state.turn === "w" ? "Black" : "White"} wins by checkmate`;
+      if (result === "stalemate") return "Stalemate";
+      if (result === "fifty-move") return "Draw by the fifty-move rule";
+      if (result === "repetition") return "Draw by repetition";
+      const side = state.turn === "w" ? "White" : "Black";
+      return result === "check" ? `${side} is in check` : `${side} to move`;
+    }
+
+    function label(square, piece) {
+      const where = squareName(square);
+      if (!piece) return where;
+      const names = { k: "king", q: "queen", r: "rook", b: "bishop", n: "knight", p: "pawn" };
+      return `${piece.side === "w" ? "White" : "Black"} ${names[piece.type]} on ${where}`;
+    }
+
+    function displaySquare(square) {
+      const rank = 7 - Math.floor(square / 8);
+      const file = square % 8;
+      return rank * 8 + file;
+    }
+
+    function agentToMove() {
+      return agentBox.checked && state.turn === "b";
+    }
+
+    function isOver() {
+      const result = outcome(state, history);
+      return result !== "playing" && result !== "check";
+    }
+  </script>
+</body>
+</html>

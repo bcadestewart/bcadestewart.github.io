@@ -111,23 +111,20 @@
     .swatch[aria-pressed="true"] { background: rgba(255, 255, 255, .14); }
     .swatch[aria-pressed="false"]::before { transform: scale(.78); opacity: .75; }
 
-    .art-hero { position: relative; overflow: hidden; padding: clamp(148px, 19vw, 238px) 0 clamp(70px, 9vw, 126px); }
+    .art-hero { position: relative; overflow: hidden; padding: clamp(148px, 16vw, 210px) 0 clamp(58px, 7vw, 92px); }
     .art-hero::after {
       content: ""; position: absolute; left: var(--gutter); right: var(--gutter); bottom: 0; height: 1px;
       background: var(--spectrum); opacity: .8;
     }
-    .eyebrow { margin: 0 0 20px; color: var(--accent); font-size: .8125rem; font-weight: 650; letter-spacing: .14em; text-transform: uppercase; }
-    .art-title {
-      margin: 0; font-size: clamp(4.5rem, 14vw, 12.5rem); font-weight: 270; font-stretch: 118%;
-      line-height: .78; letter-spacing: -.06em;
+    .art-statement {
+      max-width: 18ch; margin: 0;
+      font-size: clamp(2.4rem, 6vw, 5.5rem); font-weight: 300; font-stretch: 112%;
+      line-height: 1.04; letter-spacing: -.045em;
     }
-    .art-intro {
-      display: grid; grid-template-columns: minmax(0, 1fr) minmax(15rem, .62fr); gap: 32px 64px;
-      align-items: end; margin-top: clamp(42px, 7vw, 84px);
+    .copyright-notice {
+      max-width: 66ch; margin: clamp(28px, 4vw, 46px) 0 0;
+      color: var(--text-3); font-size: .875rem; line-height: 1.6;
     }
-    .art-intro p { max-width: 35ch; margin: 0; color: var(--text-2); font-size: clamp(1.15rem, 1.8vw, 1.5rem); line-height: 1.5; }
-    .art-meta { justify-self: end; display: flex; gap: 28px; color: var(--text-3); font-size: .875rem; }
-    .art-meta span { display: block; color: var(--text); font-size: 1.15rem; font-weight: 500; }
 
     .gallery-wrap { padding: clamp(70px, 8vw, 120px) 0 clamp(90px, 10vw, 150px); }
     .gallery { columns: 3; column-gap: clamp(18px, 2.4vw, 34px); }
@@ -174,16 +171,12 @@
 
     @media (max-width: 900px) {
       .gallery { columns: 2; }
-      .art-intro { grid-template-columns: 1fr; }
-      .art-meta { justify-self: start; }
     }
     @media (max-width: 640px) {
       .wordmark { display: none; }
       .site-header { grid-template-columns: 1fr auto; }
       .nav { justify-self: start; }
       .nav a { padding: 0 9px; font-size: .8125rem; }
-      .art-title { font-size: clamp(4.25rem, 28vw, 7rem); }
-      .art-meta { gap: 20px; }
       .gallery { columns: 1; }
       .art-card.featured { column-span: none; }
       .lightbox-inner { padding-inline: 12px; }
@@ -217,15 +210,8 @@
   <main id="main">
     <section class="art-hero" aria-labelledby="art-title">
       <div class="shell">
-        <p class="eyebrow">Studio work</p>
-        <h1 class="art-title" id="art-title">Art.</h1>
-        <div class="art-intro">
-          <p>A selection of drawings, paintings, and mixed-media work—made before and alongside the software.</p>
-          <div class="art-meta" aria-label="Gallery details">
-            <div><span>10</span>pieces</div>
-            <div><span>Selected</span>works</div>
-          </div>
-        </div>
+        <h1 class="art-statement" id="art-title">Here’s some of my art, all made by me.</h1>
+        <p class="copyright-notice">© <span class="current-year">2026</span> Brandon Stewart. All artwork on this page is original and owned by the artist. All rights reserved. No reproduction, distribution, or commercial use without written permission.</p>
       </div>
     </section>
 
@@ -316,7 +302,7 @@
 
   <footer class="site-footer">
     <div class="shell footer-row">
-      <p>© <span id="year">2026</span> Brandon Stewart</p>
+      <p>Artwork © <span id="year">2026</span> Brandon Stewart. All rights reserved.</p>
       <a href="index.html">Software portfolio</a>
     </div>
   </footer>
@@ -384,7 +370,9 @@
         if (lastOpener) lastOpener.focus();
       });
 
-      document.querySelector('#year').textContent = new Date().getFullYear();
+      const year = new Date().getFullYear();
+      document.querySelector('#year').textContent = year;
+      document.querySelector('.current-year').textContent = year;
     })();
   </script>
 </body>
